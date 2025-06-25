@@ -6,3 +6,4 @@ for x in range(list_len):
 print(lst)
 new_lst = [lst[0], lst[2], lst[-2]]
 print(new_lst)
+

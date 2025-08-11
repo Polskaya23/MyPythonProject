@@ -1,0 +1,84 @@
+class Item:
+
+    def __init__(self, name, price, description, dimensions):
+        self.price = price
+        self.description = description
+        self.dimensions = dimensions
+        self.name = name
+
+    def __str__(self):
+        return f"{self.name},  price: {self.price}"
+
+class User:
+
+    def __init__(self, name, surname, numberphone):
+        self.name = name
+        self.surname = surname
+        self.numberphone = numberphone
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
+
+class Purchase:
+    def __init__(self, user):
+        self.products = {}
+        self.user = user
+        self.total = 0
+
+    def add_item(self, item, cnt):
+        old_key = None
+        for existing_item in self.products.keys():
+            if existing_item.name == item.name:
+                old_key = existing_item
+                break
+
+        if old_key is not None:
+            old_count = self.products[old_key]
+            self.total -= old_count * old_key.price
+            del self.products[old_key]
+        else:
+            old_count = 0
+
+        self.products[item] = cnt
+        self.total += cnt * item.price
+
+    def __str__(self):
+        output = "\n".join(f"{item.name}: {cnt} pcs."
+                    for item, cnt in self.products.items())
+
+        return f"\"\"\"\nUser: {self.user.name} {self.user.surname}\nItems:\n{output}\n\"\"\""
+
+    def get_total(self):
+        return self.total
+
+lemon = Item('lemon', 5, "yellow", "small", )
+apple = Item('apple', 2, "red", "middle", )
+print(lemon)  # lemon, price: 5
+
+buyer = User("Ivan", "Ivanov", "02628162")
+print(buyer)  # Ivan Ivanov
+
+cart = Purchase(buyer)
+cart.add_item(lemon, 4)
+cart.add_item(apple, 20)
+print(cart)
+"""
+User: Ivan Ivanov
+Items:
+lemon: 4 pcs.
+apple: 20 pcs.
+"""
+assert isinstance(cart.user, User) is True, 'Екземпляр класу User'
+assert cart.get_total() == 60, "Всього 60"
+assert cart.get_total() == 60, 'Повинно залишатися 60!'
+cart.add_item(apple, 10)
+print(cart)
+"""
+User: Ivan Ivanov
+Items:
+lemon: 4 pcs.
+apple: 10 pcs.
+"""
+print(cart.get_total())
+assert cart.get_total() == 40
+
